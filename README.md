@@ -37,22 +37,19 @@ An interactive web application that leverages **Machine Learning** to provide pe
 
 ## 📂 Project Structure
 ```bash
-├── app.py                  # Flask Web Server
-├── Movie_rec.ipynb         # Model Building & Preprocessing
-├── movies_df.pkl           # Processed Dataset
-├── similarity.pkl          # Similarity Matrix
-├── utils/                  # Debugging & Verification Scripts
-└── templates/              # UI Layouts
+Movie-Recommender/
+├── .streamlit/
+│   └── config.toml          # Customizes theme (Dark/Light mode)
+├── data/
+│   ├── movies_df.pkl        # Processed dataframe
+│   └── similarity.pkl       # Similarity matrix
+├── notebook/
+│   └── Movie_rec.ipynb      # Model training & EDA
+├── src/
+│   ├── __init__.py
+│   ├── api_handler.py       # Logic for TMDB API calls
+│   └── recommender.py       # Logic for similarity calculation
+├── app.py                   # Main Streamlit UI entry point
+├── requirements.txt         # Dependencies
+└── README.md
 
----
-
-## ⚙️ Installation & Setup
-```bash
-# Clone the repository
-git clone [https://github.com/Rudra-Gupta15/movie-recommender.git](https://github.com/Rudra-Gupta15/movie-recommender.git)
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-streamlit run app.py
