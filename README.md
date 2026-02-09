@@ -1,37 +1,37 @@
-# 🎬 Movie Recommendation System
+# 🎬 Movie Recommender System | ML + Streamlit
 
 [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-2.0+-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![API](https://img.shields.io/badge/TMDB_API-01B4E4?style=for-the-badge&logo=the-movie-database&logoColor=white)](https://www.themoviedb.org/documentation/api)
 
-A **Content-Based Movie Recommendation System** built using Python and Flask. This application analyzes movie metadata (genres, keywords, and overviews) to suggest films similar to a user's selection using mathematical similarity scoring.
+An interactive web application that leverages **Machine Learning** to provide personalized movie suggestions. By analyzing content metadata, the system helps users discover their next favorite film with ease.
 
 ---
 
 ## 🚀 Key Features
-* **Instant Recommendations:** Suggests similar movies based on content metadata.
-* **Vectorized Processing:** Uses `CountVectorizer` for efficient text-to-vector transformation.
-* **Similarity Engine:** Powered by **Cosine Similarity** for high-accuracy matching.
-* **Web Interface:** Interactive UI built with Flask for a seamless user experience.
-* **Validation Tools:** Custom utility scripts for debugging dataset and genre consistency.
+* **Smart Recommendations:** Instant suggestions based on content-based filtering logic.
+* **Visual Richness:** Real-time movie posters and details fetched via **TMDB API**.
+* **Genre Discovery:** Dedicated section to browse the **Top 10 movies** by genre.
+* **Enhanced UX:** Featuring a **Light/Dark mode** toggle and a custom navigation bar.
+* **Live Deployment:** Hosted on **Streamlit Cloud** for instant accessibility.
 
 ---
 
-## 🧠 How It Works
-1. **Data Engineering:** Features like genres, cast, and keywords are merged into a single "tags" column.
-2. **Text Vectorization:** The system converts text tags into a 5000-dimensional vector space.
-3. **Similarity Matrix:** It calculates the cosine distance between vectors:
-   $$similarity = \cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|}$$
-4. **Deployment:** The model is serialized using `Pickle` for fast loading within the Flask app.
+## 🧠 Technical Workflow
+1.  **Model Training:** Developed in **Google Colab** using **Pandas** for feature engineering.
+2.  **Recommendation Logic:** Utilizes **Cosine Similarity** to compute mathematical distance between movie attributes (cast, plot, genres).
+3.  **Frontend:** Built with **Streamlit** to create a responsive and intuitive dashboard.
+4.  **Integration:** Connects to the **TMDB API** for dynamic metadata and high-quality imagery.
 
 ---
 
 ## 🛠️ Tech Stack
-- **Backend:** Python, Flask
-- **Data Science:** Pandas, NumPy, Scikit-learn
-- **Frontend:** HTML5, CSS3
-- **DevOps:** Pickle (Serialization)
+* **Language:** Python
+* **ML Libraries:** Scikit-learn, Pandas, NumPy
+* **Web Framework:** Streamlit
+* **Environment:** Google Colab, VS Code
+* **API:** The Movie Database (TMDB)
 
 ---
 
@@ -43,3 +43,16 @@ A **Content-Based Movie Recommendation System** built using Python and Flask. Th
 ├── similarity.pkl          # Similarity Matrix
 ├── utils/                  # Debugging & Verification Scripts
 └── templates/              # UI Layouts
+
+---
+
+## ⚙️ Installation & Setup
+```bash
+# Clone the repository
+git clone [https://github.com/Rudra-Gupta15/movie-recommender.git](https://github.com/Rudra-Gupta15/movie-recommender.git)
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+streamlit run app.py
