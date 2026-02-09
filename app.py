@@ -26,7 +26,7 @@ st.set_page_config(page_title="Movie Recommender System", page_icon="🎬", layo
 
 # Initialize Dark Mode State
 if 'dark_mode' not in st.session_state:
-    st.session_state.dark_mode = False
+    st.session_state.dark_mode = True
 
 # Define Colors based on Mode
 if st.session_state.dark_mode:
@@ -38,15 +38,17 @@ if st.session_state.dark_mode:
     input_text = "#ffffff"
     secondary_text = "#cccccc"
     border_color = "#555555"
+    toggle_color = "#ffffff" # White in Dark Mode
 else:
-    bg_color = "#ffffff"
-    text_color = "#333333"
-    navbar_bg = "#ffffff"
+    bg_color = "#eeeeee" # Light Grey
+    text_color = "#121212" # Almost Black for best contrast
+    navbar_bg = "#e0e0e0" # Slightly darker grey for sidebar/nav
     card_bg = "#ffffff"
-    input_bg = "#f8f9fa"
-    input_text = "#333333"
-    secondary_text = "#555555"
-    border_color = "#e0e0e0"
+    input_bg = "#ffffff"
+    input_text = "#121212"
+    secondary_text = "#444444"
+    border_color = "#cccccc"
+    toggle_color = "#000000" # Black in Light Mode
 
 # Custom CSS for Theme
 st.markdown(f"""
@@ -61,10 +63,20 @@ st.markdown(f"""
     color: {text_color};
 }}
 
-/* Headers */
-h1, h2, h3 {{
-    font-family: 'Inter', sans-serif;
+/* Sidebar Styling */
+[data-testid="stSidebar"] {{
+    background-color: {navbar_bg};
+    border-right: 1px solid {border_color};
+}}
+
+[data-testid="stSidebar"] .stMarkdown {{
     color: {text_color};
+}}
+
+/* Headers */
+h1, h2, h3, [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2 {{
+    font-family: 'Inter', sans-serif;
+    color: {text_color} !important;
     font-weight: 700;
 }}
 
@@ -73,10 +85,17 @@ h1, h2, h3 {{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: {navbar_bg};
-    padding: 10px 20px;
-    border-bottom: 1px solid {border_color};
-    margin-bottom: 20px;
+    background-color: {navbar_bg}EE; /* Higher opacity for better visibility */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 10px 40px; /* Adjusted padding */
+    border-bottom: 
+    1px solid {border_color};
+    margin: -60px -5rem 30px -5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }}
 
 /* Dropdown styling */
@@ -87,16 +106,35 @@ div[data-baseweb="select"] > div {{
     color: {input_text};
 }}
 
+/* Dropdown Menu (Popover) Styling */
+div[data-baseweb="popover"] ul {{
+    background-color: {input_bg} !important;
+    border: 1px solid {border_color} !important;
+}}
+
+div[data-baseweb="popover"] li {{
+    color: {input_text} !important;
+    background-color: transparent !important;
+    transition: background 0.2s ease;
+}}
+
+div[data-baseweb="popover"] li:hover {{
+    background-color: {navbar_bg} !important;
+}}
+
 /* Button Styling (Pill Shape) */
 .stButton > button {{
-    background-color: {navbar_bg};
-    color: {text_color};
+    background-color: {input_bg};
+    color: {text_color} !important;
     border: 1px solid {border_color};
     border-radius: 20px;
-    padding: 0.5rem 1.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 0.6rem 2rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    white-space: nowrap !important; /* Prevent text wrapping */
+    width: auto !important;
+    min-width: fit-content !important;
 }}
 
 .stButton > button:hover {{
@@ -126,9 +164,9 @@ img:hover {{
     margin-top: 8px;
 }}
 
-/* Customize Selectbox Label */
-label {{
-    color: {secondary_text} !important;
+/* Customize Selectbox/Toggle Labels */
+label, .st-ck, .st-bj, [data-testid="stWidgetLabel"] p {{
+    color: {text_color} !important;
     font-weight: 600;
 }}
 
@@ -153,17 +191,45 @@ label {{
 }}
 
 .navbar-title {{
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-left: 15px;
-    background: linear-gradient(to right, {text_color} 0%, #007bff 50%, {text_color} 100%);
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-left: 20px;
+    letter-spacing: -1.5px;
+    background: linear-gradient(
+        135deg, 
+        {text_color} 0%, 
+        #007bff 30%, 
+        #00c6ff 50%, 
+        #007bff 70%, 
+        {text_color} 100%
+    );
     background-size: 200% auto;
     color: {text_color};
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 3s linear infinite;
+    animation: shimmer 5s ease-in-out infinite;
     display: inline-block;
+    text-shadow: 0 10px 20px rgba(0, 123, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}}
+
+.navbar-title:hover {{
+    transform: scale(1.02);
+    letter-spacing: -0.5px;
+    text-shadow: 0 15px 30px rgba(0, 123, 255, 0.4);
+}}
+
+.title-emoji {{
+    font-size: 2.4rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    display: inline-block;
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}}
+
+.navbar-title:hover + .title-emoji, 
+div:hover > .title-emoji {{
+    transform: rotate(15deg) scale(1.2);
 }}
 
 /* Movie Card Animation */
@@ -179,10 +245,20 @@ label {{
 }}
 
 .movie-card {{
-    background-color: transparent;
-    border-radius: 12px;
+    background-color: {card_bg}; /* Solid background for cards */
+    border: 1px solid {border_color};
+    border-radius: 16px;
+    padding: 15px;
     overflow: hidden;
     animation: fadeInUp 0.8s ease-out backwards;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}}
+
+.movie-card:hover {{
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    border-color: #007bff;
 }}
 
 .movie-title {{
@@ -199,6 +275,53 @@ label {{
     -webkit-box-orient: vertical;
 }}
 
+/* UNIVERSAL EXTREME TOGGLE OVERRIDE - DESCENDANT TARGETING */
+div[data-testid="stSidebar"] .stToggle div[data-testid="stCheckbox"] > div {{
+    height: 50px !important;
+    width: 100px !important;
+    min-width: 100px !important;
+    min-height: 50px !important;
+    border: 3px solid {border_color} !important;
+    background-color: {input_bg} !important;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.4) !important;
+    border-radius: 25px !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
+}}
+
+/* The Knob - Targeted via Descendant */
+div[data-testid="stSidebar"] .stToggle div[data-testid="stCheckbox"] > div > div {{
+    height: 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    background: linear-gradient(145deg, #ffffff, #d9d9d9) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5) !important;
+    border-radius: 50% !important;
+    left: 4px !important;
+    top: 1px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}}
+
+/* Active State (ON) */
+div[data-testid="stSidebar"] .stToggle div[data-testid="stCheckbox"] div[data-checked="true"] {{
+    background-color: {toggle_color} !important;
+    border-color: {toggle_color} !important;
+}}
+
+div[data-testid="stSidebar"] .stToggle div[data-testid="stCheckbox"] div[data-checked="true"] > div {{
+    left: calc(100% - 46px) !important;
+    background: #007bff !important; /* Standout Blue when ON */
+}}
+
+/* Visibility when OFF */
+div[data-testid="stSidebar"] .stToggle div[data-testid="stCheckbox"] div[data-checked="false"] {{
+    border-color: {text_color} !important; /* Visible border in light mode */
+}}
+
 /* Settings Button */
 .settings-btn {{
     font-size: 1.2rem;
@@ -212,6 +335,7 @@ label {{
     transform: rotate(90deg);
 }}
 </style>
+
 """, unsafe_allow_html=True)
 
 # Load movie data
@@ -294,22 +418,30 @@ def recommend(movie):
 
 # ---------------- UI ---------------- #
 
-# Custom CSS for Navbar and Logo
-
-# Sidebar for Settings
+# Sidebar Logic - RELOCATED & PERSISTENT
 if 'show_settings' not in st.session_state:
     st.session_state.show_settings = False
 
-if st.session_state.show_settings:
-    with st.sidebar:
-        st.header("Settings")
-        st.write("Configure your preferences here.")
-        # Dark Mode Toggle
-        st.toggle("Dark Mode", key="dark_mode")
+with st.sidebar:
+    st.header("🌗 Appearance")
+    # Centers the toggle and icons
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        st.markdown('<div style="text-align: right; font-size: 1.2rem; margin-top: 5px;">☀️</div>', unsafe_allow_html=True)
+    with col2:
+        dark_mode_val = st.toggle(" ", value=st.session_state.dark_mode, label_visibility="collapsed")
+        if dark_mode_val != st.session_state.dark_mode:
+            st.session_state.dark_mode = dark_mode_val
+            st.rerun()
+    with col3:
+        st.markdown('<div style="text-align: left; font-size: 1.2rem; margin-top: 5px;">🌙</div>', unsafe_allow_html=True)
+    
+    st.divider()
+    
+    if st.session_state.show_settings:
+        st.header("⚙️ Settings")
         st.checkbox("Show Ratings (Coming Soon)", value=False, disabled=True)
-
-
-
+        st.write("More settings coming soon!")
 
 # Top Navigation Bar Layout
 col1, col2, col3 = st.columns([5, 2, 1])
@@ -321,11 +453,14 @@ with col1:
             data = base64.b64encode(f.read()).decode("utf-8")
         st.markdown(
             f"""
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; cursor: default;">
                 <a href="https://rudra-portfolio-liart.vercel.app/" target="_blank">
                     <img src="data:image/jpeg;base64,{data}" class="logo-img">
                 </a>
-                <span class="navbar-title">🎬Movie Recommender System</span>
+                <div style="display: flex; align-items: center; margin-left: 10px;">
+                    <span class="title-emoji">🎬</span>
+                    <span class="navbar-title">Movie Recommender System</span>
+                </div>
             </div>
             """,
             unsafe_allow_html=True
@@ -333,9 +468,12 @@ with col1:
     except FileNotFoundError:
         st.markdown(
             """
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; cursor: default;">
                 <img src="https://cdn-icons-png.flaticon.com/512/2503/2503508.png" class="logo-img">
-                <span class="navbar-title">🎬Movie Recommender System</span>
+                <div style="display: flex; align-items: center; margin-left: 10px;">
+                    <span class="title-emoji">🎬</span>
+                    <span class="navbar-title">Movie Recommender System</span>
+                </div>
             </div>
             """,
             unsafe_allow_html=True
@@ -362,8 +500,8 @@ with col2:
 
 with col3:
     if st.button("⚙️ Settings"):
-        st.session_state.show_settings = not st.session_state.get('show_settings', False)
-
+        st.session_state.show_settings = not st.session_state.show_settings
+        st.rerun()
 
 
 # Main Content Logic
@@ -397,7 +535,7 @@ if selected_genre != "All":
                         # Staggered animation delay (0.2s * index in batch) + base delay for row
                         delay = (i // 5) * 1.0 + (idx * 0.2) 
                         
-                        poster_html = f'<img src="{poster}" style="width:100%; border-radius:12px;">' if poster else '<div style="height:300px; background:#f0f0f0; border-radius:12px; display:flex; align-items:center; justify-content:center;">No Image</div>'
+                        poster_html = f'<img src="{poster}" style="width:100%; border-radius:12px;">' if poster else f'<div style="height:350px; background:{navbar_bg}; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; border: 1px dashed {border_color}; color:{secondary_text};"><span>🎬</span><br>No Poster Available</div>'
                         
                         st.markdown(
                             f"""
@@ -437,7 +575,7 @@ else:
             with col:
                 delay = idx * 0.2 # 0.2s staggered delay
                 
-                poster_html = f'<img src="{poster}" style="width:100%; border-radius:12px;">' if poster else '<div style="height:300px; background:#f0f0f0; border-radius:12px; display:flex; align-items:center; justify-content:center;">No Image</div>'
+                poster_html = f'<img src="{poster}" style="width:100%; border-radius:12px;">' if poster else f'<div style="height:350px; background:{navbar_bg}; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; border: 1px dashed {border_color}; color:{secondary_text};"><span>🎬</span><br>No Poster Available</div>'
 
                 st.markdown(
                     f"""
